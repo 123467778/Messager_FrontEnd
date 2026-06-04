@@ -6,12 +6,15 @@ import CreateMessage from './CreateMessage';
 import UpdateMessage from './UpdateMessage';
 import DeleteMessage from './DeleteMessage';
 import Buttons from './Buttons'
+import "bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap/dist/js/bootstrap.bundle.min.js";
 
+import Messages from './Messages';
 
 function App() {
   return (
     <>
-    <BrowserRouter>
+    {/* <BrowserRouter>
       <Routes>
         <Route path="/" element={<Buttons />} />
         <Route path="/create" element={<CreateMessage />} />
@@ -19,8 +22,8 @@ function App() {
         <Route path="/delete" element={<DeleteMessage />} />
         <Route path="/messages" element={<GetMessage />} />
       </Routes>
-    </BrowserRouter>
-    
+    </BrowserRouter> */}
+    <Messages />;
     </>
   );
 }
