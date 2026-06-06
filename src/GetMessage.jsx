@@ -212,89 +212,89 @@ function GetMessage() {
     };
 
     return (
-        <div>
-            <div style={{ marginBottom: "10px" }}>
-                <Button
-                    onClick={saveChanges}
-                    disabled={!changes}
-                >
-                    Save Changes
+        <div><Grid
+    style={{ height: "500px" }}
+    data={message}
+    dataItemKey={DATA_ITEM_KEY}
+    edit={edit}
+    editable={{ mode: "incell" }}
+    onEditChange={handleEditChange}
+    onItemChange={itemChange}
+
+ >
+    <GridColumn
+        field="id"
+        title="Id"
+        editable={false}
+        width="80px"
+    />
+
+    <GridColumn
+        field="sender"
+        title="Sender"
+    />
+
+    <GridColumn
+        field="text"
+        title="Message"
+    />
+
+    <GridColumn
+        field="likes"
+        title="Likes"
+        editor="numeric"
+        cells={{
+            data: (props) => (
+                <td>{props.dataItem.data.likes}</td>
+            ),
+        }}
+    />
+
+    <GridColumn
+        field="dislikes"
+        title="Dislikes"
+        editor="numeric"
+        cells={{
+            data: (props) => (
+                <td>{props.dataItem.data.dislikes}</td>
+            ),
+        }}
+    />
+
+    <GridColumn
+        field="status"
+        title="Status"
+        cells={{
+            data: (props) => (
+                <td>{props.dataItem.data.status}</td>
+            ),
+        }}
+    />
+
+
+    <GridColumn
+    title="Actions"
+    width="200px"
+    cells={{
+        data: () => (
+            <td>
+                <Button onClick={saveChanges} disabled={!changes}>
+                    Save
                 </Button>
 
                 <Button
                     onClick={cancelChanges}
                     disabled={!changes}
-                    style={{ marginLeft: "10px" }}
+                    style={{ marginLeft: "5px" }}
                 >
-                    Cancel Changes
+                    Cancel
                 </Button>
-            </div>
-
-            <Grid
-                style={{ height: "500px" }}
-                data={message}
-                dataItemKey={DATA_ITEM_KEY}
-                edit={edit}
-                editable={{ mode: "incell" }}
-                onEditChange={handleEditChange}
-                onItemChange={itemChange}
-            >
-                <GridColumn
-                    field="id"
-                    title="Id"
-                    editable={false}
-                    width="80px"
-                />
-
-                <GridColumn
-                    field="sender"
-                    title="Sender"
-                />
-
-                <GridColumn
-                    field="text"
-                    title="Message"
-                />
-
-                <GridColumn
-                    field="likes"
-                    title="Likes"
-                    editor="numeric"
-                    cells={{
-                        data: (props) => (
-                            <td>
-                                {props.dataItem.data.likes}
-                            </td>
-                        ),
-                    }}
-                />
-
-                <GridColumn
-                    field="dislikes"
-                    title="Dislikes"
-                    editor="numeric"
-                    cells={{
-                        data: (props) => (
-                            <td>
-                                {props.dataItem.data.dislikes}
-                            </td>
-                        ),
-                    }}
-                />
-
-                <GridColumn
-                    field="status"
-                    title="Status"
-                    cells={{
-                        data: (props) => (
-                            <td>
-                                {props.dataItem.data.status}
-                            </td>
-                        ),
-                    }}
-                />
-            </Grid>
-        </div>
+            </td>
+        )
+    }}
+/>
+</Grid>
+    </div>
     );
 }
 
