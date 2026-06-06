@@ -11,6 +11,9 @@ import "bootstrap/dist/js/bootstrap.bundle.min.js";
 
 import Messages from './Messages';
 
+import MessagePages  from './MessagePages';
+import LoadMessages from './LoadMessages';
+
 function App() {
   return (
     <>
@@ -23,7 +26,9 @@ function App() {
         <Route path="/messages" element={<GetMessage />} />
       </Routes>
     </BrowserRouter> */}
-    <Messages />;
+    {/* <Messages />; */}
+    <MessagePages/>
+    {/* <GetMessage/> */}
     </>
   );
 }

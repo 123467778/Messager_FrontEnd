@@ -162,7 +162,9 @@ function reducer(state, action) {
 
   // 5. Submit
   const handleSubmit = async (e) => {
+
     e.preventDefault();
+
 
     try {
       await axios.post("http://localhost:8080/message/create", state);
