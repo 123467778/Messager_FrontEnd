@@ -10,7 +10,7 @@
 
 // const handleChange = (e) => {
 //     setMessage({ ...message, [e.target.name]: e.target.value });
-    
+
 //   }; 
 
 
@@ -22,18 +22,18 @@
 //         console.log(message.text);
 
 
-          
+
 //         alert("Message Saved Successfully...");
 //                setMessage({sender:"" ,  text:""});
 
-       
+
 
 
 //     }
 //     catch(err){
 //         alert("Something went wrong...");
 //     }
-    
+
 // }
 
 //     return(
@@ -51,7 +51,7 @@
 //           name="sender"
 //         value={message.sender}
 //           placeholder="Enter your name"
-        
+
 //           onChange={handleChange}
 //         />
 //       </div>
@@ -67,7 +67,7 @@
 //           value={message.text}
 //           rows="3"
 //           onChange={handleChange}
-        
+
 //         />
 //       </div>
 //        <div className="mb-3">
@@ -81,7 +81,7 @@
 //           name="nstatus"
 //         value={message.nstatus}
 //         placeholder="Enter your status code "
-        
+
 //           onChange={handleChange}
 //         />
 //       </div>
@@ -110,7 +110,7 @@ const initialState = {
     dislikes: 0,
     status: ""
   },
-  nstatus:"1"
+  nstatus: 1
 };
 
 // 2. Reducer Function
@@ -119,7 +119,10 @@ function reducer(state, action) {
     case "SET_FIELD":
       return {
         ...state,
-        [action.field]: action.value
+        [action.field]:
+            action.field === "nstatus"
+              ? Number(action.value)
+              : action.value
       };
 
     case "SET_DATA_FIELD":
@@ -127,7 +130,10 @@ function reducer(state, action) {
         ...state,
         data: {
           ...state.data,
-          [action.field]: action.value
+          [action.field]:
+            action.field === "likes" || action.field === "dislikes"
+              ? Number(action.value)
+              : action.value
         }
       };
 
@@ -139,7 +145,7 @@ function reducer(state, action) {
   }
 }
 
- function CreateMessage() {
+function CreateMessage() {
   const [state, dispatch] = useReducer(reducer, initialState);
 
   // 3. Handle normal inputs
@@ -160,10 +166,50 @@ function reducer(state, action) {
     });
   };
 
+
+
+  // validation
+  const [errors, setErrors] = useState({})
+  const validate = (state) => {
+    let err = {};
+
+    if (!state.sender.trim()) {
+      err.sender = "Sender is required";
+    }
+
+    if (!state.text.trim()) {
+      err.text = "Text is required";
+    } else if (state.text.length > 250) {
+      err.text = "Text must be less than 250 characters";
+    }
+
+
+   if (state.nstatus !== 1 && state.nstatus !== -1) {
+  err.nstatus = "Nstatus must be 1 or -1";
+}
+
+    return err;
+  };
+
+
+
+
+
+
   // 5. Submit
   const handleSubmit = async (e) => {
 
     e.preventDefault();
+
+    const validationErrors = validate(state);
+    setErrors(validationErrors);
+
+    if (Object.keys(validationErrors).length > 0) {
+      return;
+    }
+
+
+
 
 
     try {
@@ -178,110 +224,120 @@ function reducer(state, action) {
       alert("Something went wrong");
     }
   };
-  return(
-<>
 
-<form onSubmit={handleSubmit}>
-      <div className="mb-3">
-        <label htmlFor="sender" className="form-label">
-          Sender
-        </label>
-        <input
-          type="text"
-          className="form-control"
-          id="sender"
-          name="sender"
-        value={state.sender}
-          placeholder="Enter your name"
-        
-          onChange={handleChange}
-        />
-      </div>
+  return (
+    <>
 
-      <div className="mb-3">
-        <label htmlFor="message" className="form-label">
-          Text
-        </label>
-        <textarea
-          className="form-control"
-          id="text"
-          name="text"
-          value={state.text}
-          rows="3"
-          onChange={handleChange}
-        
-        />
-      </div>
-       <div className="mb-3">
-        <label htmlFor="nstatus" className="form-label">
-          Nstatus
-        </label>
-        <input
-          type="number"
-          className="form-control"
-          id="nstatus"
-          name="nstatus"
-        value={state.nstatus}
-        placeholder="Enter your status code "
-        
-          onChange={handleChange}
-        />
-      </div>
-      <div className="mb-3">
-        <label htmlFor="sender" className="form-label">
-          Likes
-        </label>
-        <input
-          type="number"
-          className="form-control"
-          id="likes"
-          name="likes"
-        value={state.data.likes}
-          
-        
-          onChange={handleDataChange}
-        />
-      </div>
+      <form onSubmit={handleSubmit}>
+        <div className="mb-3">
+          <label htmlFor="sender" className="form-label">
+            Sender
+          </label>
+          <input
+            type="text"
+            className="form-control"
+            id="sender"
+            name="sender"
+            value={state.sender}
+            placeholder="Enter your name"
 
-      <div className="mb-3">
-        <label htmlFor="sender" className="form-label">
-          Dislikes
-        </label>
-        <input
-          type="number"
-          className="form-control"
-          id="dislikes"
-          name="dislikes"
-        value={state.data.dislikes}
-        
-        
-          onChange={handleDataChange}
-        />
-      </div>
+            onChange={handleChange}
+          />
+          {errors.sender && (
+            <p style={{ color: "red" }}>{errors.sender}</p>
+          )}
+        </div>
 
-      <div className="mb-3">
-        <label htmlFor="sender" className="form-label">
-          Status
-        </label>
-        <input
-          type="text"
-          className="form-control"
-          id="status"
-          name="status"
-        value={state.data.status}
-     
-        
-          onChange={handleDataChange}
-        />
-      </div>
+        <div className="mb-3">
+          <label htmlFor="message" className="form-label">
+            Text
+          </label>
+          <textarea
+            className="form-control"
+            id="text"
+            name="text"
+            value={state.text}
+            rows="3"
+            onChange={handleChange}
+
+          />
+          {errors.text && (
+            <p style={{ color: "red" }}>{errors.text}</p>
+          )}
+
+        </div>
+        <div className="mb-3">
+          <label>Nstatus</label>
+
+          <select
+            className="form-control"
+            name="nstatus"
+            value={state.nstatus}
+            onChange={handleChange}
+          >
+            <option value={1}>1</option>
+            <option value={-1}>-1</option>
+          </select>
+
+          {errors.nstatus && (
+            <p style={{ color: "red" }}>{errors.nstatus}</p>
+          )}
+        </div>
+        <div className="mb-3">
+          <label htmlFor="sender" className="form-label">
+            Likes
+          </label>
+          <input
+            type="number"
+            className="form-control"
+            id="likes"
+            name="likes"
+            value={state.data.likes}
 
 
-      <button type="submit" className="btn btn-primary">
-        Submit
-      </button>
-    </form>
-</>
-    );
+            onChange={handleDataChange}
+          />
+        </div>
+
+        <div className="mb-3">
+          <label htmlFor="sender" className="form-label">
+            Dislikes
+          </label>
+          <input
+            type="number"
+            className="form-control"
+            id="dislikes"
+            name="dislikes"
+            value={state.data.dislikes}
+
+
+            onChange={handleDataChange}
+          />
+        </div>
+
+        <div className="mb-3">
+          <label htmlFor="sender" className="form-label">
+            Status
+          </label>
+          <input
+            type="text"
+            className="form-control"
+            id="status"
+            name="status"
+            value={state.data.status}
+
+
+            onChange={handleDataChange}
+          />
+        </div>
+
+
+        <button type="submit" className="btn btn-primary">
+          Submit
+        </button>
+      </form>
+    </>
+  );
 }
 export default CreateMessage;
 
